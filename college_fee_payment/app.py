@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import json, os
 from datetime import datetime
+from twilio.rest import Client
 
 app = Flask(__name__)
 app.secret_key = "college_fee_payment_secret"
@@ -8,6 +9,7 @@ app.secret_key = "college_fee_payment_secret"
 BASE_DIR = os.path.join(os.path.dirname(__file__), "database")
 USERS_FILE = os.path.join(BASE_DIR, "users.json")
 PAYMENTS_FILE = os.path.join(BASE_DIR, "payments.json")
+PENDING_FILE = os.path.join(BASE_DIR, "pending_transactions.json")
 
 
 # ---------- UTIL ----------
@@ -83,11 +85,30 @@ def verify():
 
 # ---------- PAYMENT ----------
 
-# ---------- SMS SIMULATION ----------
+# ---------- SMS WITH TWILIO ----------
 def send_sms(mobile, message):
-    # Simulate sending SMS
-    print(f"\n[SMS GATEWAY] Sending to {mobile}: {message}\n")
-    # In a real app, use Twilio/Fast2SMS here
+    # Get Twilio credentials from environment variables
+    account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
+    auth_token = os.environ.get('TWILIO_AUTH_TOKEN')
+    twilio_number = os.environ.get('TWILIO_PHONE_NUMBER')
+    
+    # If credentials are not set, fall back to simulation
+    if not all([account_sid, auth_token, twilio_number]):
+        print(f"\n[SMS SIMULATION] Sending to {mobile}: {message}\n")
+        print("[INFO] Set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, and TWILIO_PHONE_NUMBER to enable real SMS\n")
+        return
+    
+    try:
+        client = Client(account_sid, auth_token)
+        sms = client.messages.create(
+            body=message,
+            from_=twilio_number,
+            to=mobile
+        )
+        print(f"\n[SMS SENT] Message SID: {sms.sid} to {mobile}\n")
+    except Exception as e:
+        print(f"\n[SMS ERROR] Failed to send SMS: {str(e)}\n")
+        print(f"[SMS SIMULATION] Would have sent to {mobile}: {message}\n")
 
 # ---------- PAYMENT ----------
 @app.route("/payment", methods=["GET", "POST"])
@@ -99,18 +120,20 @@ def payment():
         ref = "SB" + datetime.now().strftime("%Y%m%d%H%M%S")
         session["ref"] = ref
         
-        # Add to Pending Transactions
-        PENDING_TRANSACTIONS[ref] = {
+        # Add to Pending Transactions (file-based)
+        pending = load_json(PENDING_FILE)
+        pending[ref] = {
             "ref": ref,
             "amount": session["student"]["amount"],
             "student": session["student"]["student_name"],
             "status": "PENDING",
             "timestamp": datetime.now().strftime("%H:%M:%S")
         }
+        save_json(PENDING_FILE, pending)
         
         # Send SMS to Admin
         admin_mobile = "+916301422287"
-        approval_link = f"http://127.0.0.1:5000/approve_payment/{ref}"
+        approval_link = f"https://college-fee-payment.onrender.com/approve_payment/{ref}"
         msg = f"New Payment: Rs {session['student']['amount']} from {session['student']['student_name']}. Approve: {approval_link}"
         send_sms(admin_mobile, msg)
         
@@ -125,15 +148,15 @@ def payment():
 
 # ---------- POLLING & BANK ADMIN ----------
 
-# Global Dict for polling simulation
-PENDING_TRANSACTIONS = {} 
-
 @app.route("/check_status/<ref>")
 def check_status(ref):
     print(f"DEBUG: Checking status for {ref}")
-    if ref in PENDING_TRANSACTIONS:
-        status = PENDING_TRANSACTIONS[ref]["status"]
-        print(f"DEBUG: Found in PENDING_TRANSACTIONS. Status: {status}")
+    
+    # Check pending transactions file
+    pending = load_json(PENDING_FILE)
+    if ref in pending:
+        status = pending[ref]["status"]
+        print(f"DEBUG: Found in pending file. Status: {status}")
         return json.dumps({"status": status})
     
     # Check payments.json for completed
@@ -147,24 +170,29 @@ def check_status(ref):
 
 @app.route("/bank_admin")
 def bank_admin():
-    # Show only PENDING transactions
-    pending = {k: v for k, v in PENDING_TRANSACTIONS.items() if v["status"] == "PENDING"}
+    # Show only PENDING transactions from file
+    all_pending = load_json(PENDING_FILE)
+    pending = {k: v for k, v in all_pending.items() if v.get("status") == "PENDING"}
     return render_template("bank_admin.html", transactions=pending)
 
 @app.route("/approve_payment/<ref>")
 def approve_payment(ref):
-    if ref in PENDING_TRANSACTIONS:
-        PENDING_TRANSACTIONS[ref]["status"] = "SUCCESS"
+    pending = load_json(PENDING_FILE)
+    
+    if ref in pending:
+        # Update status to SUCCESS
+        pending[ref]["status"] = "SUCCESS"
+        save_json(PENDING_FILE, pending)
         
-        # Save to permanent storage (simulate bank callback)
+        # Save to permanent storage
         payments = load_json(PAYMENTS_FILE)
         data = {
             "ref": ref,
             "date": datetime.now().strftime("%d-%m-%Y"),
-            "college": session.get("college", "Unknown"),
-            "student": session.get("student", {}),
-            "mode": "UPI (Simulated)",
-            "amount": PENDING_TRANSACTIONS[ref]["amount"]
+            "college": "PBR VITS",
+            "student": {"student_name": pending[ref]["student"]},
+            "mode": "UPI (Approved)",
+            "amount": pending[ref]["amount"]
         }
         payments[ref] = data
         save_json(PAYMENTS_FILE, payments)

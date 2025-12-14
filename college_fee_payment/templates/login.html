@@ -204,6 +204,113 @@
             right: 350px;
             transform: rotate(-12deg);
         }
+
+        /* ================= MOBILE RESPONSIVE ================= */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                width: 100%;
+                height: auto;
+                min-height: 600px;
+                flex-direction: column;
+                border-radius: 10px;
+            }
+
+            .form-box {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 30px 25px;
+            }
+
+            .form-box h2 {
+                font-size: 24px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            .input-box {
+                margin-bottom: 25px;
+            }
+
+            .input-box input {
+                font-size: 15px;
+                padding: 10px 0;
+            }
+
+            .input-box label {
+                font-size: 14px;
+            }
+
+            .btn {
+                height: 50px;
+                font-size: 16px;
+                margin-top: 15px;
+            }
+
+            .link {
+                font-size: 13px;
+                margin-top: 15px;
+                text-align: center;
+            }
+
+            /* Hide animated background on mobile */
+            .container .blueBg {
+                display: none;
+            }
+
+            /* Stack forms vertically */
+            .form-box.login {
+                position: relative;
+                left: 0;
+                transition: none;
+            }
+
+            .form-box.register {
+                position: relative;
+                right: 0;
+                display: none;
+                transition: none;
+            }
+
+            .container.active .form-box.login {
+                display: none;
+            }
+
+            .container.active .form-box.register {
+                display: flex;
+            }
+
+            .shape {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                min-height: 550px;
+            }
+
+            .form-box {
+                padding: 25px 20px;
+            }
+
+            .form-box h2 {
+                font-size: 22px;
+            }
+
+            .input-box input {
+                font-size: 14px;
+            }
+
+            .btn {
+                height: 48px;
+                font-size: 15px;
+            }
+        }
     </style>
 </head>
 

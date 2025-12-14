@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Payee – PBR VITS</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            font-size: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 10px;
+        }
+
+        th {
+            background: #eaeaea;
+        }
+
+        tr:hover {
+            background: #eef;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Select Payee (B.Tech Colleges – Andhra Pradesh)</h1>
+
+        <input type="text" id="searchBox" placeholder="Search college (ex: PBR VITS)">
+
+        <table id="collegeTable">
+            <tr>
+                <th>College Name</th>
+                <th>Location</th>
+            </tr>
+
+            <tr onclick="selectCollege('PBR VISVODAYA INSTITUTE OF TECHNOLOGY AND SCIENCE')">
+                <td>PBR VISVODAYA INSTITUTE OF TECHNOLOGY AND SCIENCE (PBR VITS)</td>
+                <td>Kavali, Andhra Pradesh</td>
+            </tr>
+
+            <tr onclick="selectCollege('SRI VENKATESWARA UNIVERSITY COLLEGE OF ENGINEERING')">
+                <td>SRI VENKATESWARA UNIVERSITY COLLEGE OF ENGINEERING</td>
+                <td>Tirupati, Andhra Pradesh</td>
+            </tr>
+
+            <tr onclick="selectCollege('JNTUA COLLEGE OF ENGINEERING')">
+                <td>JNTUA COLLEGE OF ENGINEERING</td>
+                <td>Anantapur, Andhra Pradesh</td>
+            </tr>
+
+            <tr onclick="selectCollege('ANDHRA UNIVERSITY COLLEGE OF ENGINEERING')">
+                <td>ANDHRA UNIVERSITY COLLEGE OF ENGINEERING</td>
+                <td>Visakhapatnam, Andhra Pradesh</td>
+            </tr>
+
+            <tr onclick="selectCollege('G PULLA REDDY ENGINEERING COLLEGE')">
+                <td>G PULLA REDDY ENGINEERING COLLEGE</td>
+                <td>Kurnool, Andhra Pradesh</td>
+            </tr>
+
+        </table>
+
+        <form id="payeeForm" action="{{ url_for('select_payee') }}" method="POST" style="display: none;">
+            <input type="hidden" name="college" id="collegeInput">
+        </form>
+
+    </div>
+
+    <script>
+        const searchBox = document.getElementById("searchBox");
+        const table = document.getElementById("collegeTable");
+
+        searchBox.addEventListener("keyup", () => {
+            const value = searchBox.value.toLowerCase();
+            for (let i = 1; i < table.rows.length; i++) {
+                const text = table.rows[i].innerText.toLowerCase();
+                table.rows[i].style.display =
+                    text.includes(value) ? "" : "none";
+            }
+        });
+
+        function selectCollege(collegeName) {
+            document.getElementById("collegeInput").value = collegeName;
+            document.getElementById("payeeForm").submit();
+        }
+    </script>
+
+</body>
+
+</html>

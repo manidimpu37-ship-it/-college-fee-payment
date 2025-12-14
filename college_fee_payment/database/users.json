@@ -1,0 +1,14 @@
+{
+    "panimanikanta": {
+        "email": "manikanta49@gmail.com",
+        "password": "12345"
+    },
+    "panimanikantatestuser": {
+        "email": "test@test.com",
+        "password": "12345testpass"
+    },
+    "dimpu": {
+        "email": "manikantabathula49@gmail.com",
+        "password": "12345"
+    }
+}

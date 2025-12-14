@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SB Collect Receipt – PBR VITS</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+
+        .receipt {
+            width: 900px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 30px;
+            border: 1px solid #ccc;
+        }
+
+        .header {
+            text-align: center;
+        }
+
+        .header img {
+            width: 90px;
+        }
+
+        .header h2 {
+            margin: 10px 0 5px;
+            color: #1a4fa3;
+        }
+
+        .header p {
+            margin: 2px 0;
+            font-size: 14px;
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            font-size: 15px;
+        }
+
+        td {
+            padding: 6px 4px;
+            vertical-align: top;
+        }
+
+        td:first-child {
+            width: 40%;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 25px;
+            font-size: 13px;
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 8px 18px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .print {
+            background: #f4d03f;
+        }
+
+        .close {
+            background: #ccc;
+        }
+
+        @media print {
+            .actions {
+                display: none;
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .receipt {
+                width: 100%;
+                margin: 10px;
+                padding: 15px;
+            }
+
+            .header img {
+                width: 70px;
+            }
+
+            .header h2 {
+                font-size: 18px;
+            }
+
+            .header p {
+                font-size: 12px;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            td {
+                padding: 5px 2px;
+            }
+
+            td:first-child {
+                width: 45%;
+            }
+
+            .footer {
+                font-size: 11px;
+            }
+
+            .btn {
+                padding: 10px 15px;
+                font-size: 14px;
+                display: block;
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="receipt">
+
+        <!-- HEADER -->
+        <div class="header">
+            <img src="{{ url_for('static', filename='pbrvits.jpg') }}" alt="PBR VITS Logo">
+            <h2>PBRVITS</h2>
+            <p>VISVODAYA CAMPUS, UDAYAGIRI ROAD, KAVALI – 524201</p>
+            <p><b>Date:</b> {{ data.date }}</p>
+        </div>
+
+        <hr>
+
+        <!-- DETAILS -->
+        <table>
+            <tr>
+                <td>SBCollect Reference Number :</td>
+                <td>{{ data.ref }}</td>
+            </tr>
+            <tr>
+                <td>Category :</td>
+                <td>{{ data.college }}</td>
+            </tr>
+            <tr>
+                <td>Payment Mode :</td>
+                <td>{{ data.mode }}</td>
+            </tr>
+            <tr>
+                <td>Transaction Amount :</td>
+                <td>₹ {{ data.student['amount'] }}</td>
+            </tr>
+            <tr>
+                <td>Transaction Charge :</td>
+                <td>₹ 0.00</td>
+            </tr>
+            <tr>
+                <td>Total Amount (In Figures) :</td>
+                <td>₹ {{ data.student['amount'] }}</td>
+            </tr>
+            <tr>
+                <td>Total Amount (In Words) :</td>
+                <td>(Amt in words not implemented)</td>
+            </tr>
+            <tr>
+                <td>Remarks :</td>
+                <td>{{ data.student['remarks'] }}</td>
+            </tr>
+            <tr>
+                <td>Notification 1 :</td>
+                <td>Payment Successful</td>
+            </tr>
+            <tr>
+                <td>Notification 2 :</td>
+                <td>Thank you</td>
+            </tr>
+        </table>
+
+        <hr>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p>
+                Thank you for choosing SB Collect. If you have any query / grievances regarding the transaction, please
+                contact us.
+            </p>
+            <p>
+                Toll-free helpline number: 1800-1111-09 / 1800-1234 / 1800-2100
+            </p>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="actions">
+            <button class="btn print" onclick="window.print()">Print</button>
+            <a href="{{ url_for('login') }}"><button class="btn close">Home</button></a>
+        </div>
+
+        <script>
+            // Auto print on load
+            window.onload = function () {
+                window.print();
+            };
+        </script>
+
+</body>
+
+</html>

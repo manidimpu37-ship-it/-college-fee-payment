@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animated Login & Register</title>
+    <title>Login – PBR VITS</title>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
         * {
             margin: 0;
@@ -21,289 +21,133 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: #111;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
         }
 
         .container {
-            position: relative;
-            width: 800px;
-            height: 460px;
-            background: #1f1f24;
-            border: 2px solid #e46033;
-            box-shadow: 0 0 25px #e46033;
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             overflow: hidden;
-            color: #fff;
         }
-
-        /* ================= FORMS ================= */
 
         .form-box {
-            position: absolute;
-            width: 50%;
-            height: 100%;
-            padding: 50px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            z-index: 2;
+            padding: 40px 30px;
         }
 
-        .form-box h2 {
-            font-size: 32px;
-            margin-bottom: 25px;
+        .form-box.hidden {
+            display: none;
+        }
+
+        h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
         }
 
         .input-box {
             position: relative;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .input-box input {
             width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid #aaa;
+            padding: 12px 15px;
+            background: #f5f5f5;
+            border: 2px solid transparent;
+            border-radius: 8px;
             outline: none;
-            color: #fff;
-            font-size: 16px;
-            padding: 8px 0;
+            color: #333;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .input-box input:focus {
+            background: #fff;
+            border-color: #667eea;
         }
 
         .input-box label {
             position: absolute;
+            left: 15px;
             top: 50%;
-            left: 0;
             transform: translateY(-50%);
-            color: #aaa;
+            color: #999;
             pointer-events: none;
-            transition: .4s;
+            transition: 0.3s;
+            font-size: 15px;
         }
 
         .input-box input:focus~label,
         .input-box input:valid~label {
-            top: -6px;
-            font-size: 13px;
-            color: #e46033;
+            top: -10px;
+            left: 10px;
+            font-size: 12px;
+            color: #667eea;
+            background: #fff;
+            padding: 0 5px;
         }
 
         .btn {
-            height: 45px;
-            border-radius: 30px;
+            width: 100%;
+            height: 50px;
+            border-radius: 8px;
             border: none;
-            background: linear-gradient(90deg, #e46033, #ff8a50);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
             margin-top: 10px;
+            transition: transform 0.2s;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
         }
 
         .link {
+            text-align: center;
             margin-top: 20px;
             font-size: 14px;
+            color: #666;
         }
 
         .link a {
-            color: #e46033;
-            cursor: pointer;
+            color: #667eea;
             text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
         }
 
-        /* LOGIN */
-
-        .login {
-            left: 0;
-            transition: .7s ease;
+        .link a:hover {
+            text-decoration: underline;
         }
 
-        /* REGISTER */
-
-        .register {
-            right: -50%;
-            opacity: 0;
-            transition: .7s ease;
-        }
-
-        /* ACTIVE STATE */
-
-        .container.active .login {
-            left: -50%;
-            opacity: 0;
-        }
-
-        .container.active .register {
-            right: 0;
-            opacity: 1;
-        }
-
-        /* ================= INFO PANELS ================= */
-
-        .info {
-            position: absolute;
-            width: 50%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 60px;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .info h1 {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-
-        .info p {
-            font-size: 16px;
-            line-height: 1.6;
-        }
-
-        /* RIGHT INFO */
-
-        .info.login-info {
-            right: 0;
-            text-align: right;
-            transition: .7s ease;
-        }
-
-        /* LEFT INFO */
-
-        .info.register-info {
-            left: -50%;
-            text-align: left;
-            opacity: 0;
-            transition: .7s ease;
-        }
-
-        .container.active .login-info {
-            right: -50%;
-            opacity: 0;
-        }
-
-        .container.active .register-info {
-            left: 0;
-            opacity: 1;
-        }
-
-        /* ================= DIAGONAL SHAPE ================= */
-
-        .shape {
-            position: absolute;
-            width: 900px;
-            height: 600px;
-            background: linear-gradient(135deg, #e46033, #ff8a50);
-            top: -150px;
-            right: -350px;
-            transform: rotate(12deg);
-            transition: 1s ease;
-            z-index: 0;
-        }
-
-        .container.active .shape {
-            right: 350px;
-            transform: rotate(-12deg);
-        }
-
-        /* ================= MOBILE RESPONSIVE ================= */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .container {
-                width: 100%;
-                height: auto;
-                min-height: 600px;
-                flex-direction: column;
-                border-radius: 10px;
-            }
-
-            .form-box {
-                width: 100%;
-                height: auto;
-                position: relative;
-                padding: 30px 25px;
-            }
-
-            .form-box h2 {
-                font-size: 24px;
-                margin-bottom: 20px;
-                text-align: center;
-            }
-
-            .input-box {
-                margin-bottom: 25px;
-            }
-
-            .input-box input {
-                font-size: 15px;
-                padding: 10px 0;
-            }
-
-            .input-box label {
-                font-size: 14px;
-            }
-
-            .btn {
-                height: 50px;
-                font-size: 16px;
-                margin-top: 15px;
-            }
-
-            .link {
-                font-size: 13px;
-                margin-top: 15px;
-                text-align: center;
-            }
-
-            /* Hide animated background on mobile */
-            .container .blueBg {
-                display: none;
-            }
-
-            /* Stack forms vertically */
-            .form-box.login {
-                position: relative;
-                left: 0;
-                transition: none;
-            }
-
-            .form-box.register {
-                position: relative;
-                right: 0;
-                display: none;
-                transition: none;
-            }
-
-            .container.active .form-box.login {
-                display: none;
-            }
-
-            .container.active .form-box.register {
-                display: flex;
-            }
-
-            .shape {
-                display: none;
-            }
-        }
-
+        /* Mobile Optimization */
         @media (max-width: 480px) {
-            .container {
-                min-height: 550px;
-            }
-
             .form-box {
-                padding: 25px 20px;
+                padding: 30px 20px;
             }
 
-            .form-box h2 {
-                font-size: 22px;
+            h2 {
+                font-size: 24px;
             }
 
             .input-box input {
                 font-size: 14px;
+                padding: 11px 12px;
             }
 
             .btn {
@@ -315,82 +159,74 @@
 </head>
 
 <body>
-
     <div class="container">
-
         <!-- LOGIN FORM -->
-        <form class="form-box login" action="{{ url_for('login') }}" method="POST">
-            <h2>Login</h2>
+        <div class="form-box login" id="loginForm">
+            <h2>Welcome Back!</h2>
+            <p class="subtitle">Login to continue</p>
 
-            <div class="input-box">
-                <input type="text" name="username" required>
-                <label>Username</label>
-            </div>
+            <form action="{{ url_for('login') }}" method="POST">
+                <div class="input-box">
+                    <input type="text" name="username" required>
+                    <label>Username</label>
+                </div>
 
-            <div class="input-box">
-                <input type="password" name="password" required>
-                <label>Password</label>
-            </div>
+                <div class="input-box">
+                    <input type="password" name="password" required>
+                    <label>Password</label>
+                </div>
 
-            <button class="btn" type="submit">Login</button>
+                <button type="submit" class="btn">Login</button>
 
-            <div class="link">
-                Don't have an account?
-                <a class="SignUpLink">Sign Up</a>
-            </div>
-        </form>
+                <p class="link">
+                    Don't have an account? <a class="SignUpLink">Sign Up</a>
+                </p>
+            </form>
+        </div>
 
         <!-- REGISTER FORM -->
-        <form class="form-box register" action="{{ url_for('register') }}" method="POST">
-            <h2>Register</h2>
+        <div class="form-box register hidden" id="registerForm">
+            <h2>Create Account</h2>
+            <p class="subtitle">Join us today</p>
 
-            <div class="input-box">
-                <input type="text" name="username" required>
-                <label>Username</label>
-            </div>
+            <form action="{{ url_for('register') }}" method="POST">
+                <div class="input-box">
+                    <input type="text" name="username" required>
+                    <label>Username</label>
+                </div>
 
-            <div class="input-box">
-                <input type="email" name="email" required>
-                <label>Email</label>
-            </div>
+                <div class="input-box">
+                    <input type="email" name="email" required>
+                    <label>Email</label>
+                </div>
 
-            <div class="input-box">
-                <input type="password" name="password" required>
-                <label>Password</label>
-            </div>
+                <div class="input-box">
+                    <input type="password" name="password" required>
+                    <label>Password</label>
+                </div>
 
-            <button class="btn" type="submit">Register</button>
+                <button type="submit" class="btn">Register</button>
 
-            <div class="link">
-                Already have an account?
-                <a class="SignInLink">Sign In</a>
-            </div>
-        </form>
-
-        <!-- INFO PANELS -->
-        <div class="info login-info">
-            <h1>WELCOME BACK!</h1>
-            <p>
-                We are happy to have you with us again. If you need anything, we are here to help.
-            </p>
+                <p class="link">
+                    Already have an account? <a class="SignInLink">Sign In</a>
+                </p>
+            </form>
         </div>
-
-        <div class="info register-info">
-            <h1>WELCOME!</h1>
-            <p>
-                We’re delighted to have you here. If you need any assistance, feel free to reach out.
-            </p>
-        </div>
-
-        <div class="shape"></div>
     </div>
 
     <script>
-        const container = document.querySelector('.container');
-        document.querySelector('.SignUpLink').onclick = () =>
-            container.classList.add('active');
-        document.querySelector('.SignInLink').onclick = () =>
-            container.classList.remove('active');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+
+        document.querySelector('.SignUpLink').onclick = () => {
+            loginForm.classList.add('hidden');
+            registerForm.classList.remove('hidden');
+        };
+
+        document.querySelector('.SignInLink').onclick = () => {
+            registerForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+        };
     </script>
 
 </body>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Complete Payment – PBR VITS</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+        
+        .card {
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .payment-grid {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .payment-box {
+            width: 220px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .payment-box img {
+            width: 40px;
+        }
+        
+        .click-btn {
+            background: #f4d03f;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .hidden {
+            display: none
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .next-btn {
+            margin-top: 20px;
+            background: #f4d03f;
+            border: none;
+            padding: 10px 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .note {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- PAYMENT OPTIONS -->
+        <div class="card">
+            <h3>Select Payment Mode</h3>
+
+            <div class="payment-grid">
+                <div class="payment-box">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/SBI-logo.svg">
+                    <p><b>SBI Net Banking</b></p>
+                    <button class="click-btn" onclick="showDetails('SBI Net Banking')">Click Here</button>
+                </div>
+
+                <div class="payment-box">
+                    <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png">
+                    <p><b>Credit Card</b></p>
+                    <button class="click-btn" onclick="showDetails('Credit Card')">Click Here</button>
+                </div>
+
+                <div class="payment-box">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg">
+                    <p><b>UPI</b></p>
+                    <button class="click-btn" onclick="showDetails('UPI')">Click Here</button>
+                </div>
+
+                <div class="payment-box">
+                    <img src="https://img.icons8.com/fluency/48/bank-building.png">
+                    <p><b>Branch</b></p>
+                    <button class="click-btn" onclick="showDetails('Branch')">Click Here</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAYMENT DETAILS -->
+        <div class="card hidden" id="paymentDetails">
+            <h3>Payment Details</h3>
+
+            <div class="summary-row">
+                <span>Fee Type</span>
+                <span id="feeType"></span>
+            </div>
+
+            <div class="summary-row">
+                <span>Amount</span>
+                <span>₹ <span id="amount"></span></span>
+            </div>
+
+            <div class="summary-row">
+                <span>Payment Mode</span>
+                <span id="mode"></span>
+            </div>
+
+            <p class="note" id="message"></p>
+
+            <button class="next-btn" onclick="next()">NEXT</button>
+        </div>
+
+    </div>
+
+    <script>
+        // Load data entered in previous page
+        document.getElementById("feeType").innerText =
+            sessionStorage.getItem("fee") || "COLLEGE FEE";
+
+        document.getElementById("amount").innerText =
+            sessionStorage.getItem("amount") || "2500";
+
+        function showDetails(mode) {
+            document.getElementById("paymentDetails").classList.remove("hidden");
+            document.getElementById("mode").innerText = mode;
+
+            let msg = "";
+            if (mode === "SBI Net Banking") {
+                msg = "You will be redirected to SBI login page.";
+            } else if (mode === "Credit Card") {
+                msg = "You will be redirected to secure card payment gateway.";
+            } else if (mode === "UPI") {
+                msg = "Please scan the QR code using your UPI app.";
+            } else if (mode === "Branch") {
+                msg = "Please visit SBI branch with the reference number.";
+            }
+
+            document.getElementById("message").innerText = msg;
+            sessionStorage.setItem("paymentMode", mode);
+        }
+
+        function next() {
+            window.location.href = "receipt.html";
+        }
+    </script>
+
+</body>
+
+</html>

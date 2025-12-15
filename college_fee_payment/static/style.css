@@ -1,0 +1,685 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    --text-color: #ffffff;
+    --accent-color: #ffffff;
+    --input-bg: rgba(255, 255, 255, 0.2);
+    --button-bg: #ffffff;
+    --button-text: #2b1055;
+    --button-hover: #f0f0f0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #2b1055, #7597de);
+    background-attachment: fixed;
+    /* Ensures gradient covers scrolling pages */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+}
+
+/* Glass Card Utility */
+.glass-card,
+.card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    padding: 40px;
+    color: var(--text-color);
+    animation: fadeIn 0.8s ease-out;
+    margin-bottom: 20px;
+    /* Added for spacing between cards */
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4 {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+p,
+label,
+span {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+a:hover {
+    text-decoration: underline;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Inputs */
+.input-group {
+    margin-bottom: 20px;
+    position: relative;
+    animation: slideUp 0.5s ease-out forwards;
+    opacity: 0;
+    /* Start hidden for animation */
+}
+
+/* Stagger animations for inputs */
+.input-group:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.input-group:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.input-group:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+.input-group:nth-child(4) {
+    animation-delay: 0.8s;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 12px 15px;
+    background: var(--input-bg);
+    border: 1px solid transparent;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+}
+
+/* Fix for dropdown options visibility */
+select option {
+    background: #fff;
+    color: #333;
+}
+
+/* ---------- GLOBAL LOADING SPINNER ---------- */
+#loader-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: rgba(43, 16, 85, 0.8);
+    /* Matches theme dark purple */
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease-out;
+}
+
+.loader {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #fff;
+    animation: spin 2s linear infinite;
+}
+
+.loader:before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #a1c4fd;
+    /* Light blue accent */
+    animation: spin 3s linear infinite;
+}
+
+.loader:after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #c2e9fb;
+    /* Lighter blue */
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loader-text {
+    position: absolute;
+    color: #fff;
+    font-size: 14px;
+    letter-spacing: 2px;
+    font-weight: 500;
+    text-transform: uppercase;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Hide when loaded */
+.loaded #loader-wrapper {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Print Hide */
+@media print {
+    #loader-wrapper {
+        display: none !important;
+    }
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+input:focus,
+select:focus {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Buttons */
+.btn,
+button,
+input[type="submit"],
+input[type="reset"] {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 25px;
+    background: var(--button-bg);
+    color: var(--button-text);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+    animation: slideUp 0.5s ease-out forwards;
+    animation-delay: 0.8s;
+    /* Default delay for single button */
+    opacity: 0;
+}
+
+.btn:hover {
+    background: var(--button-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* ---------- PROGRESS BAR ---------- */
+.progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.step {
+    width: 160px;
+    text-align: center;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    margin: 0 auto 8px;
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.done .circle {
+    background: #00e676;
+    /* Bright Green */
+    border-color: #00e676;
+    box-shadow: 0 0 10px #00e676;
+}
+
+.active .circle {
+    border-color: #00e676;
+    background: rgba(0, 230, 118, 0.2);
+    box-shadow: 0 0 10px rgba(0, 230, 118, 0.5);
+}
+
+.line {
+    flex: 1;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ---------- FORMS ---------- */
+.form-row {
+    display: flex;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    /* Responsive */
+    align-items: center;
+}
+
+.form-row label {
+    width: 260px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.form-row input,
+.form-row select,
+.form-row textarea {
+    flex: 1;
+    /* Take remaining space */
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    border-radius: 8px;
+}
+
+.form-row input:focus,
+.form-row select:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #fff;
+}
+
+/* ---------- CAPTCHA ---------- */
+.captcha-container {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.captcha-box {
+    font-size: 28px;
+    letter-spacing: 6px;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    text-decoration: line-through;
+    color: #fff;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.buttons button {
+    width: auto;
+    padding: 10px 30px;
+}
+
+/* Warning Box */
+.warning {
+    background: rgba(255, 235, 59, 0.2);
+    /* Semi transparent yellow */
+    border: 1px solid rgba(255, 235, 59, 0.5);
+    color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* ---------- PAYMENT PAGE ---------- */
+.payment-box {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    width: 200px;
+    cursor: pointer;
+    transition: 0.3s;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.payment-box:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border-color: #fff;
+}
+
+.payment-box img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+}
+
+.click-btn {
+    background: #fff;
+    color: #2b1055;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    margin-top: 10px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 15px;
+}
+
+.summary-row:last-child {
+    border-bottom: none;
+}
+
+#qrCodeContainer {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-top: 15px;
+}
+
+#qrCodeContainer p {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* ---------- RECEIPT PAGE ---------- */
+.receipt-card {
+    width: 800px;
+    /* Wider for standard A4 feel */
+    max-width: 95%;
+    font-size: 14px;
+}
+
+.receipt-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.receipt-header img {
+    height: 80px;
+    margin-bottom: 10px;
+}
+
+.receipt-row {
+    display: flex;
+    margin-bottom: 12px;
+}
+
+.receipt-row span:first-child {
+    width: 40%;
+    font-weight: 600;
+}
+
+.receipt-row span:last-child {
+    width: 60%;
+    padding-left: 20px;
+}
+
+/* ---------- PRINT MEDIA ---------- */
+@media print {
+    body {
+        background: #fff;
+        color: #000;
+        display: block;
+        /* Align top for print */
+    }
+
+    .glass-card,
+    .receipt-card {
+        background: #fff;
+        color: #000;
+        box-shadow: none;
+        border: none;
+        backdrop-filter: none;
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    h2,
+    h3,
+    span,
+    p,
+    label,
+    div,
+    b {
+        color: #000 !important;
+    }
+
+    .btn,
+    button,
+    .payment-box {
+        display: none !important;
+    }
+
+    input {
+        border: none;
+        color: #000;
+    }
+
+    /* Print specific tweaks for receipt */
+    .receipt-header img {
+        height: 70px;
+        /* slightly smaller for print */
+    }
+
+    .receipt-row {
+        margin-bottom: 8px;
+        /* tighter spacing for print */
+        font-size: 13px;
+    }
+}
+
+/* ---------- INNER PAGE ANIMATIONS ---------- */
+
+/* Staggered Form Rows */
+.form-row {
+    animation: slideUp 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.form-row:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.form-row:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.form-row:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.form-row:nth-child(4) {
+    animation-delay: 0.25s;
+}
+
+.form-row:nth-child(5) {
+    animation-delay: 0.3s;
+}
+
+.form-row:nth-child(6) {
+    animation-delay: 0.35s;
+}
+
+.form-row:nth-child(7) {
+    animation-delay: 0.4s;
+}
+
+.form-row:nth-child(8) {
+    animation-delay: 0.45s;
+}
+
+.form-row:nth-child(9) {
+    animation-delay: 0.5s;
+}
+
+.form-row:nth-child(10) {
+    animation-delay: 0.55s;
+}
+
+/* Staggered Table Rows */
+tr {
+    animation: fadeIn 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+tr:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+tr:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+tr:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+tr:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+tr:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+tr:nth-child(6) {
+    animation-delay: 0.6s;
+}
+
+/* Staggered Details (Verify Page) */
+.details div {
+    animation: slideUp 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+.details div:nth-child(odd) {
+    animation-delay: 0.2s;
+}
+
+.details div:nth-child(even) {
+    animation-delay: 0.3s;
+}

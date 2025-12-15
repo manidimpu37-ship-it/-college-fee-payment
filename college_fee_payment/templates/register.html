@@ -3,287 +3,38 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Animated Login & Register</title>
-
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: #111;
-        }
-
-        .container {
-            position: relative;
-            width: 800px;
-            height: 460px;
-            background: #1f1f24;
-            border: 2px solid #e46033;
-            box-shadow: 0 0 25px #e46033;
-            overflow: hidden;
-            color: #fff;
-        }
-
-        /* ================= FORMS ================= */
-
-        .form-box {
-            position: absolute;
-            width: 50%;
-            height: 100%;
-            padding: 50px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            z-index: 2;
-        }
-
-        .form-box h2 {
-            font-size: 32px;
-            margin-bottom: 25px;
-        }
-
-        .input-box {
-            position: relative;
-            margin-bottom: 30px;
-        }
-
-        .input-box input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid #aaa;
-            outline: none;
-            color: #fff;
-            font-size: 16px;
-            padding: 8px 0;
-        }
-
-        .input-box label {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            color: #aaa;
-            pointer-events: none;
-            transition: .4s;
-        }
-
-        .input-box input:focus~label,
-        .input-box input:valid~label {
-            top: -6px;
-            font-size: 13px;
-            color: #e46033;
-        }
-
-        .btn {
-            height: 45px;
-            border-radius: 30px;
-            border: none;
-            background: linear-gradient(90deg, #e46033, #ff8a50);
-            color: #fff;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .link {
-            margin-top: 20px;
-            font-size: 14px;
-        }
-
-        .link a {
-            color: #e46033;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        /* LOGIN */
-
-        .login {
-            left: 0;
-            transition: .7s ease;
-        }
-
-        /* REGISTER */
-
-        .register {
-            right: -50%;
-            opacity: 0;
-            transition: .7s ease;
-        }
-
-        /* ACTIVE STATE */
-
-        .container.active .login {
-            left: -50%;
-            opacity: 0;
-        }
-
-        .container.active .register {
-            right: 0;
-            opacity: 1;
-        }
-
-        /* ================= INFO PANELS ================= */
-
-        .info {
-            position: absolute;
-            width: 50%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 60px;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .info h1 {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-
-        .info p {
-            font-size: 16px;
-            line-height: 1.6;
-        }
-
-        /* RIGHT INFO */
-
-        .info.login-info {
-            right: 0;
-            text-align: right;
-            transition: .7s ease;
-        }
-
-        /* LEFT INFO */
-
-        .info.register-info {
-            left: -50%;
-            text-align: left;
-            opacity: 0;
-            transition: .7s ease;
-        }
-
-        .container.active .login-info {
-            right: -50%;
-            opacity: 0;
-        }
-
-        .container.active .register-info {
-            left: 0;
-            opacity: 1;
-        }
-
-        /* ================= DIAGONAL SHAPE ================= */
-
-        .shape {
-            position: absolute;
-            width: 900px;
-            height: 600px;
-            background: linear-gradient(135deg, #e46033, #ff8a50);
-            top: -150px;
-            right: -350px;
-            transform: rotate(12deg);
-            transition: 1s ease;
-            z-index: 0;
-        }
-
-        .container.active .shape {
-            right: 350px;
-            transform: rotate(-12deg);
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register – PBR VITS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
+    {% include 'spinner.html' %}
 
-    <div class="container active">
+    <div class="glass-card" style="width: 400px; text-align: center;">
+        <h2 style="margin-bottom: 5px;">Join Us</h2>
+        <p style="margin-bottom: 30px; font-size: 14px; opacity: 0.8;">Create your account</p>
 
-        <!-- LOGIN FORM -->
-        <form class="form-box login" action="{{ url_for('login') }}" method="POST">
-            <h2>Login</h2>
-
-            <div class="input-box">
-                <input type="text" name="username" required>
-                <label>Username</label>
+        <form action="{{ url_for('register') }}" method="POST">
+            <div class="input-group">
+                <input type="text" name="username" placeholder="Username" required>
             </div>
 
-            <div class="input-box">
-                <input type="password" name="password" required>
-                <label>Password</label>
+            <div class="input-group">
+                <input type="email" name="email" placeholder="Email Address" required>
             </div>
 
-            <button class="btn" type="submit">Login</button>
-
-            <div class="link">
-                Don't have an account?
-                <a class="SignUpLink">Sign Up</a>
-            </div>
-        </form>
-
-        <!-- REGISTER FORM -->
-        <form class="form-box register" action="{{ url_for('register') }}" method="POST">
-            <h2>Register</h2>
-
-            <div class="input-box">
-                <input type="text" name="username" required>
-                <label>Username</label>
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Password" required>
             </div>
 
-            <div class="input-box">
-                <input type="email" name="email" required>
-                <label>Email</label>
-            </div>
+            <button type="submit" class="btn">Register</button>
 
-            <div class="input-box">
-                <input type="password" name="password" required>
-                <label>Password</label>
-            </div>
-
-            <button class="btn" type="submit">Register</button>
-
-            <div class="link">
-                Already have an account?
-                <a class="SignInLink">Sign In</a>
-            </div>
-        </form>
-
-        <!-- INFO PANELS -->
-        <div class="info login-info">
-            <h1>WELCOME BACK!</h1>
-            <p>
-                We are happy to have you with us again. If you need anything, we are here to help.
+            <p style="margin-top: 25px; font-size: 14px; animation: fadeIn 1.2s ease-out;">
+                Already have an account? <a href="{{ url_for('login') }}" style="font-weight: 600;">Login</a>
             </p>
-        </div>
-
-        <div class="info register-info">
-            <h1>WELCOME!</h1>
-            <p>
-                We’re delighted to have you here. If you need any assistance, feel free to reach out.
-            </p>
-        </div>
-
-        <div class="shape"></div>
+        </form>
     </div>
-
-    <script>
-        const container = document.querySelector('.container');
-        document.querySelector('.SignUpLink').onclick = () =>
-            container.classList.add('active');
-        document.querySelector('.SignInLink').onclick = () =>
-            container.classList.remove('active');
-    </script>
 
 </body>
 

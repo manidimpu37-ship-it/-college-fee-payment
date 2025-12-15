@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import json, os
 from datetime import datetime
 from twilio.rest import Client
@@ -113,6 +113,10 @@ def send_sms(mobile, message):
 # ---------- PAYMENT ----------
 @app.route("/payment", methods=["GET", "POST"])
 def payment():
+    # Check if session data exists
+    if "student" not in session or "amount" not in session.get("student", {}):
+        return redirect(url_for("enter_details"))
+
     if request.method == "POST":
         session["payment_mode"] = request.form["mode"]
         
@@ -120,26 +124,32 @@ def payment():
         ref = "SB" + datetime.now().strftime("%Y%m%d%H%M%S")
         session["ref"] = ref
         
-        # Add to Pending Transactions (file-based)
+        # Simplified Flow: Save directly as SUCCESS
+        payments = load_json(PAYMENTS_FILE)
+        payments[ref] = {
+            "ref": ref,
+            "date": datetime.now().strftime("%d-%m-%Y"),
+            "college": session.get("college", "PBR VITS"),
+            "student": session["student"], # Contains student_name, amount etc
+            "mode": request.form["mode"],
+            "amount": session["student"]["amount"],
+            "status": "SUCCESS"
+        }
+        save_json(PAYMENTS_FILE, payments)
+        
+        # Also add to pending just in case, but mark SUCCESS
         pending = load_json(PENDING_FILE)
         pending[ref] = {
             "ref": ref,
             "amount": session["student"]["amount"],
             "student": session["student"]["student_name"],
-            "status": "PENDING",
+            "status": "SUCCESS",
             "timestamp": datetime.now().strftime("%H:%M:%S")
         }
         save_json(PENDING_FILE, pending)
         
-        # Send SMS to Admin
-        admin_mobile = "+916301422287"
-        approval_link = f"https://college-fee-payment.onrender.com/approve_payment/{ref}"
-        msg = f"New Payment: Rs {session['student']['amount']} from {session['student']['student_name']}. Approve: {approval_link}"
-        send_sms(admin_mobile, msg)
-        
-        return render_template("payment.html", 
-                               amount=session["student"]["amount"], 
-                               ref=ref)
+        # Redirect directly to receipt
+        return redirect(url_for("receipt"))
                                
     return render_template("payment.html",
                            amount=session["student"]["amount"],
@@ -157,16 +167,16 @@ def check_status(ref):
     if ref in pending:
         status = pending[ref]["status"]
         print(f"DEBUG: Found in pending file. Status: {status}")
-        return json.dumps({"status": status})
+        return jsonify({"status": status})
     
     # Check payments.json for completed
     payments = load_json(PAYMENTS_FILE)
     if ref in payments:
          print(f"DEBUG: Found in payments.json. Status: SUCCESS")
-         return json.dumps({"status": "SUCCESS"})
+         return jsonify({"status": "SUCCESS"})
     
     print(f"DEBUG: Not found. Status: UNKNOWN")
-    return json.dumps({"status": "UNKNOWN"})
+    return jsonify({"status": "UNKNOWN"})
 
 @app.route("/bank_admin")
 def bank_admin():
@@ -211,12 +221,17 @@ def receipt():
         data = payments[ref]
     else:
         # Fallback if accessed directly or before polling finished (shouldn't happen in flow)
+        student_data = session.get("student", {})
         data = {
-            "ref": ref,
+            "ref": ref or "N/A",
             "date": datetime.now().strftime("%d-%m-%Y"),
-            "college": session.get("college", ""),
-            "student": session.get("student", {}),
-            "mode": session.get("payment_mode", "")
+            "college": session.get("college", "PBR VITS"),
+            "student": {
+                "student_name": student_data.get("student_name", "N/A"),
+                "amount": student_data.get("amount", "0"),
+                "remarks": student_data.get("remarks", "")
+            },
+            "mode": session.get("payment_mode", "N/A")
         }
 
     return render_template("receipt.html", data=data)
@@ -224,5 +239,5 @@ def receipt():
 
 if __name__ == "__main__":
     import os
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 5001))
     app.run(host="0.0.0.0", port=port, debug=False)

@@ -6,155 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify Payment Details – PBR VITS</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: auto;
-        }
-
-        .card {
-            background: #fff;
-            border: 1px solid #ccc;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        /* Progress */
-
-        .progress {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .step {
-            width: 160px;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        .circle {
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            border: 2px solid #aaa;
-            margin: 0 auto 6px;
-        }
-
-        .done .circle {
-            background: #2e7d32;
-            border-color: #2e7d32;
-        }
-
-        .active .circle {
-            border-color: #1976d2;
-        }
-
-        .line {
-            flex: 1;
-            height: 2px;
-            background: #aaa;
-        }
-
-        /* Details table */
-
-        .details {
-            display: grid;
-            grid-template-columns: 300px auto;
-            row-gap: 12px;
-        }
-
-        .details div {
-            padding: 6px 0;
-        }
-
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        button {
-            padding: 10px 25px;
-            font-size: 15px;
-            background: #f4d03f;
-            border: none;
-            cursor: pointer;
-        }
-
-        .footer {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            color: #555;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .card {
-                padding: 15px;
-            }
-
-            .progress {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .step {
-                width: 100%;
-                font-size: 13px;
-            }
-
-            .line {
-                display: none;
-            }
-
-            .details {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-
-            .details div {
-                padding: 4px 0;
-            }
-
-            .details div:first-child {
-                font-weight: bold;
-                color: #333;
-            }
-
-            .buttons {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            button {
-                width: 100%;
-                padding: 14px;
-                font-size: 16px;
-            }
-
-            .footer {
-                flex-direction: column;
-                gap: 5px;
-                text-align: center;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ range(1, 10000) | random }}">
+    <!-- No inline styles needed -->
 </head>
 
 <body>
+    {% include 'spinner.html' %}
 
     <div class="container">
 
@@ -194,29 +51,63 @@
         <div class="card">
             <h3>Payment Details</h3>
 
-            <div class="details">
-                <div><b>Payment Category :</b></div>
-                <div>{{ student.category }}</div>
-                <div><b>Name of the Student :</b></div>
-                <div>{{ student.student_name }}</div>
-                <div><b>Roll No :</b></div>
-                <div>{{ student.roll_no }}</div>
-                <div><b>Academic Year :</b></div>
-                <div>{{ student.academic_year }}</div>
-                <div><b>Semester :</b></div>
-                <div>{{ student.semester }}</div>
-                <div><b>Course :</b></div>
-                <div>{{ student.course }}</div>
-                <div><b>Branch :</b></div>
-                <div>{{ student.branch }}</div>
-                <div><b>Regulation :</b></div>
-                <div>{{ student.regulation }}</div>
-                <div><b>Fee Details :</b></div>
-                <div>{{ student.fee_details }}</div>
-                <div><b>Amount :</b></div>
-                <div>{{ student.amount }}</div>
-                <div><b>Remarks :</b></div>
-                <div>{{ student.remarks }}</div>
+            <!-- Reusing receipt-row class for consistent "Label : Value" alignment -->
+            <div class="receipt-body" style="animation: slideUp 0.5s ease-out;">
+
+                <div class="receipt-row">
+                    <span>Payment Category :</span>
+                    <span>{{ student.category }}</span>
+                </div>
+
+                <div class="receipt-row">
+                    <span>Name of the Student :</span>
+                    <span>{{ student.student_name }}</span>
+                </div>
+
+                <div class="receipt-row">
+                    <span>Roll No :</span>
+                    <span>{{ student.roll_no }}</span>
+                </div>
+
+                <div class="receipt-row">
+                    <span>Academic Year :</span>
+                    <span>{{ student.academic_year }}</span>
+                </div>
+
+                <div class="receipt-row">
+                    <span>Semester :</span>
+                    <span>{{ student.semester }}</span>
+                </div>
+
+                <div class="receipt-row">
+                    <span>Course :</span>
+                    <span>{{ student.course }}</span>
+                </div>
+
+                <div class="receipt-row">
+                    <span>Branch :</span>
+                    <span>{{ student.branch }}</span>
+                </div>
+
+                <div class="receipt-row">
+                    <span>Regulation :</span>
+                    <span>{{ student.regulation }}</span>
+                </div>
+
+                <div class="receipt-row">
+                    <span>Fee Details :</span>
+                    <span>{{ student.fee_details }}</span>
+                </div>
+
+                <div class="receipt-row">
+                    <span>Amount :</span>
+                    <span>{{ student.amount }}</span>
+                </div>
+
+                <div class="receipt-row">
+                    <span>Remarks :</span>
+                    <span>{{ student.remarks }}</span>
+                </div>
             </div>
 
             <div class="buttons">

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Enter Payment Details – PBR VITS</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+        
+        .card {
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .progress {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .step {
+            width: 160px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .circle {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 2px solid #aaa;
+            margin: 0 auto 6px;
+        }
+        
+        .done .circle {
+            background: #2e7d32;
+            border-color: #2e7d32;
+        }
+        
+        .active .circle {
+            border-color: #1976d2;
+        }
+        
+        .line {
+            flex: 1;
+            height: 2px;
+            background: #aaa;
+        }
+        
+        .warning {
+            background: #fff9c4;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .form-row {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .form-row label {
+            width: 260px;
+            font-weight: bold;
+        }
+        
+        .form-row input,
+        .form-row select,
+        .form-row textarea {
+            width: 350px;
+            padding: 8px;
+        }
+        
+        textarea {
+            height: 60px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        button {
+            padding: 8px 18px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #555;
+        }
+        /* hide second form initially */
+        
+        #detailsSection {
+            display: none;
+        }
+        /* Captcha + terms styles */
+        
+        .captcha-section {
+            margin-top: 20px;
+        }
+        
+        .terms-box {
+            background: #eee;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .terms-box a {
+            color: #3f51b5;
+            text-decoration: none;
+        }
+        
+        .captcha-container {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+        
+        .captcha-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 10px 0;
+        }
+        
+        .captcha-box {
+            font-size: 28px;
+            letter-spacing: 6px;
+            font-weight: bold;
+            background: #f5f5f5;
+            padding: 8px 18px;
+            border: 1px solid #aaa;
+            text-decoration: line-through;
+        }
+        
+        .captcha-container input[type="text"] {
+            padding: 8px;
+            width: 220px;
+        }
+        
+        .captcha-type {
+            margin-top: 10px;
+        }
+        
+        .voice-controls {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- PAYMENT PROGRESS -->
+        <div class="card">
+            <h3>Payment Progress</h3>
+            <div class="progress">
+                <div class="step done">
+                    <div class="circle"></div>Select Payee
+                </div>
+                <div class="line"></div>
+                <div class="step active">
+                    <div class="circle"></div>Enter Payment Details
+                </div>
+                <div class="line"></div>
+                <div class="step">
+                    <div class="circle"></div>Verify Payment Details
+                </div>
+                <div class="line"></div>
+                <div class="step">
+                    <div class="circle"></div>Complete Payment
+                </div>
+                <div class="line"></div>
+                <div class="step">
+                    <div class="circle"></div>Print Receipt
+                </div>
+            </div>
+
+            <div class="warning">
+                <b>This page will expire in 05.00 minutes, please complete the data entry in time to avoid timeout error.</b>
+            </div>
+        </div>
+
+        <!-- COLLEGE INFO -->
+        <div class="card">
+            <b>PBR VITS | VISVODAYA CAMPUS, UDAYAGIRI ROAD, KAVALI – 524201</b>
+        </div>
+
+        <!-- STEP 1 : PAYMENT CATEGORY (NO CAPTCHA HERE) -->
+        <div class="card" id="categorySection">
+            <h3>Enter Payment Details</h3>
+
+            <div class="form-row">
+                <label>Payment Category *</label>
+                <select id="paymentCategory">
+                    <option value="">-- Select any Category --</option>
+                    <option>EXAM FEE</option>
+                    <option>PBRVITS COLLEGE FEE</option>
+                    <option>MEN HOSTEL FEE</option>
+                    <option>BUS FEE</option>
+                    <option>WOMEN HOSTEL FEE</option>
+                    <option>INTERNATIONAL CONFERENCE</option>
+                    <option>VISVOTSAV EVENTS</option>
+                </select>
+            </div>
+
+            <button onclick="showDetails()">Proceed</button>
+        </div>
+
+        <!-- STEP 2 : FULL DETAILS (SAME PAGE, STILL NO CAPTCHA INSIDE THIS CARD) -->
+        <div class="card" id="detailsSection">
+            <h3>Enter Payment Details</h3>
+
+            <div class="form-row">
+                <label>Payment Category *</label>
+                <input type="text" id="selectedCategory" readonly>
+            </div>
+
+            <div class="form-row">
+                <label>Name of the Student *</label>
+                <input type="text" required>
+            </div>
+
+            <div class="form-row">
+                <label>Roll No *</label>
+                <input type="text" required>
+            </div>
+
+            <div class="form-row">
+                <label>Academic Year *</label>
+                <select required>
+                    <option value="">-- Select Academic Year --</option>
+                    <option>FIRST YEAR</option>
+                    <option>SECOND YEAR</option>
+                    <option>THIRD YEAR</option>
+                    <option>FOURTH YEAR</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Semester *</label>
+                <select required>
+                    <option value="">-- Select Semester --</option>
+                    <option>SEMESTER 1</option>
+                    <option>SEMESTER 2</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Course *</label>
+                <select required>
+                    <option value="">-- Select Course --</option>
+                    <option>B.TECH</option>
+                    <option>M.TECH</option>
+                    <option>MCA</option>
+                    <option>MBA</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Branch *</label>
+                <select required>
+                    <option value="">-- Select Branch --</option>
+                    <option>CSE</option>
+                    <option>CSE-AIML</option>
+                    <option>CIVIL</option>
+                    <option>ECE</option>
+                    <option>IT</option>
+                    <option>MECH</option>
+                    <option>DSCE</option>
+                    <option>VLSID</option>
+                    <option>CS</option>
+                    <option>MD</option>
+                    <option>MBA</option>
+                    <option>MCA</option>
+                    <option>EEE</option>
+                    <option>CSE-AI</option>
+                    <option>CSE-IOT</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>REGULATION *</label>
+                <select required>
+                    <option value="">-- Select Regulation --</option>
+                    <option>R09</option>
+                    <option>R10</option>
+                    <option>R11</option>
+                    <option>R12</option>
+                    <option>R13</option>
+                    <option>R14</option>
+                    <option>R15</option>
+                    <option>R16</option>
+                    <option>R17</option>
+                    <option>R18</option>
+                    <option>R19</option>
+                    <option>R20</option>
+                    <option>R21</option>
+                    <option>R22</option>
+                    <option>R23</option>
+                    <option>R24</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>FEE DETAILS *</label>
+                <select required>
+                    <option value="">-- Select Fee Details --</option>
+                    <option>REGULAR</option>
+                    <option>SUPPLY</option>
+                    <option>RECOUNTING</option>
+                    <option>PC</option>
+                    <option>PROJECT</option>
+                    <option>CONDONATION</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Amount *</label>
+                <input type="number" required>
+            </div>
+
+            <div class="form-row">
+                <label>Remarks</label>
+                <textarea></textarea>
+            </div>
+
+            <h4>Enter Your Details</h4>
+
+            <div class="form-row">
+                <label>Remitter Name *</label>
+                <input type="text" required>
+            </div>
+
+            <div class="form-row">
+                <label>Mobile No *</label>
+                <input type="text" placeholder="+91" required>
+            </div>
+
+            <div class="form-row">
+                <label>Email ID *</label>
+                <input type="email" required>
+            </div>
+        </div>
+
+        <!-- TERMS, IMAGE + VOICE CAPTCHA & ACTION BUTTONS (LAST STEP) -->
+        <div class="card captcha-section" id="captchaSection">
+
+            <!-- TERMS -->
+            <div class="terms-box">
+                <input type="checkbox" id="termsCheck">
+                <label for="termsCheck">
+                    I have read and agreed to the
+                    <a href="#">Terms &amp; Conditions</a>
+                </label>
+            </div>
+
+            <!-- CAPTCHA -->
+            <div class="captcha-container">
+
+                <!-- LEFT -->
+                <div style="max-width: 350px;">
+                    <label>
+                        <b>Enter the text as shown in the image / heard in audio <span style="color:red">*</span></b>
+                    </label>
+
+                    <div class="captcha-row" id="imageCaptchaRow">
+                        <div id="captchaBox" class="captcha-box"></div>
+                        <button type="button" onclick="generateCaptcha()">↻</button>
+                    </div>
+
+                    <div class="voice-controls" id="voiceControls" style="display:none;">
+                        <button type="button" onclick="playVoiceCaptcha()">🔊 Play Captcha</button>
+                    </div>
+
+                    <input type="text" id="captchaInput" placeholder="Enter Captcha">
+                </div>
+
+                <!-- RIGHT -->
+                <div>
+                    <label><b>Select Captcha type <span style="color:red">*</span></b></label>
+                    <div class="captcha-type">
+                        <input type="radio" name="captchaType" id="captchaImage" value="image" checked onchange="switchCaptchaType()">
+                        <label for="captchaImage">Image Captcha</label><br>
+
+                        <input type="radio" name="captchaType" id="captchaVoice" value="voice" onchange="switchCaptchaType()">
+                        <label for="captchaVoice">Voice Captcha</label>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- BUTTONS -->
+            <div class="buttons">
+                <button type="button" onclick="goBack()">Back</button>
+                <button type="reset" onclick="resetForm()">Reset</button>
+                <button type="button" onclick="validateCaptcha()">Next</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // navigation logic
+        function showDetails() {
+            const category = document.getElementById("paymentCategory").value;
+            if (category === "") {
+                alert("Please select Payment Category");
+                return;
+            }
+            document.getElementById("categorySection").style.display = "none";
+            document.getElementById("detailsSection").style.display = "block";
+        }
+
+        function goBack() {
+            // go back to category section
+            document.getElementById("detailsSection").style.display = "none";
+            document.getElementById("categorySection").style.display = "block";
+        }
+
+        function resetForm() {
+            location.reload();
+        }
+
+        // captcha logic
+        let captchaText = "";
+
+        function generateCaptcha() {
+            const chars = "abcdefghjkmnpqrstuvwxyz23456789";
+            captchaText = "";
+            for (let i = 0; i < 5; i++) {
+                captchaText += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById("captchaBox").innerText = captchaText;
+        }
+
+        function switchCaptchaType() {
+            const isVoice = document.getElementById("captchaVoice").checked;
+            const imageRow = document.getElementById("imageCaptchaRow");
+            const voiceControls = document.getElementById("voiceControls");
+
+            if (isVoice) {
+                imageRow.style.opacity = "0.3"; // show but de-emphasize
+                voiceControls.style.display = "block";
+            } else {
+                imageRow.style.opacity = "1";
+                voiceControls.style.display = "none";
+            }
+        }
+
+        function playVoiceCaptcha() {
+            if (!captchaText) {
+                generateCaptcha();
+            }
+            const msg = new SpeechSynthesisUtterance();
+            // read characters spaced out for clarity
+            msg.text = captchaText.split("").join(" ");
+            msg.lang = "en-IN";
+            window.speechSynthesis.speak(msg);
+        }
+
+        function validateCaptcha() {
+            const input = document.getElementById("captchaInput").value.trim();
+            const terms = document.getElementById("termsCheck").checked;
+
+            if (!terms) {
+                alert("Please agree to Terms & Conditions");
+                return;
+            }
+
+            if (input === "") {
+                alert("Please enter Captcha");
+                return;
+            }
+
+            if (input.toLowerCase() !== captchaText.toLowerCase()) {
+                alert("Invalid Captcha");
+                generateCaptcha();
+                return;
+            }
+
+            alert("Captcha verified successfully. Moving to Verify page.");
+            window.location.href = "verify_payment.html";
+        }
+
+        // initialize captcha on load
+        generateCaptcha();
+    </script>
+
+</body>
+
+</html>

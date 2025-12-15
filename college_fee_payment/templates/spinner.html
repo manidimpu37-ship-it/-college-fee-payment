@@ -1,0 +1,30 @@
+<div id="loader-wrapper">
+    <div class="loader"></div>
+    <div class="loader-text">Loading...</div>
+</div>
+
+<script>
+    // Hide spinner when page is fully loaded
+    window.addEventListener('load', function () {
+        const loader = document.getElementById('loader-wrapper');
+        // Small delay to ensure smooth transition and let user see the "beauty"
+        setTimeout(() => {
+            document.body.classList.add('loaded');
+        }, 800);
+    });
+
+    // Show spinner again on link clicks or form submission locally
+    document.addEventListener('submit', function () {
+        document.body.classList.remove('loaded');
+    });
+
+    // Optional: Show on links (be careful with external links or anchors)
+    document.querySelectorAll('a[href]').forEach(link => {
+        link.addEventListener('click', function (e) {
+            const target = this.getAttribute('href');
+            if (target.startsWith('#')) return;
+            if (target.startsWith('javascript')) return;
+            document.body.classList.remove('loaded');
+        });
+    });
+</script>

@@ -5,229 +5,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login – PBR VITS</title>
-
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 400px;
-            background: #fff;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-
-        .form-box {
-            padding: 40px 30px;
-        }
-
-        .form-box.hidden {
-            display: none;
-        }
-
-        h2 {
-            font-size: 28px;
-            color: #333;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 30px;
-        }
-
-        .input-box {
-            position: relative;
-            margin-bottom: 25px;
-        }
-
-        .input-box input {
-            width: 100%;
-            padding: 12px 15px;
-            background: #f5f5f5;
-            border: 2px solid transparent;
-            border-radius: 8px;
-            outline: none;
-            color: #333;
-            font-size: 15px;
-            transition: all 0.3s;
-        }
-
-        .input-box input:focus {
-            background: #fff;
-            border-color: #667eea;
-        }
-
-        .input-box label {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
-            pointer-events: none;
-            transition: 0.3s;
-            font-size: 15px;
-        }
-
-        .input-box input:focus~label,
-        .input-box input:valid~label {
-            top: -10px;
-            left: 10px;
-            font-size: 12px;
-            color: #667eea;
-            background: #fff;
-            padding: 0 5px;
-        }
-
-        .btn {
-            width: 100%;
-            height: 50px;
-            border-radius: 8px;
-            border: none;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: transform 0.2s;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .link {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .link a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .link a:hover {
-            text-decoration: underline;
-        }
-
-        /* Mobile Optimization */
-        @media (max-width: 480px) {
-            .form-box {
-                padding: 30px 20px;
-            }
-
-            h2 {
-                font-size: 24px;
-            }
-
-            .input-box input {
-                font-size: 14px;
-                padding: 11px 12px;
-            }
-
-            .btn {
-                height: 48px;
-                font-size: 15px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=2">
 </head>
 
 <body>
-    <div class="container">
-        <!-- LOGIN FORM -->
-        <div class="form-box login" id="loginForm">
-            <h2>Welcome Back!</h2>
-            <p class="subtitle">Login to continue</p>
+    {% include 'spinner.html' %}
 
-            <form action="{{ url_for('login') }}" method="POST">
-                <div class="input-box">
-                    <input type="text" name="username" required>
-                    <label>Username</label>
-                </div>
+    <div class="glass-card" style="width: 400px; text-align: center;">
+        <h2 style="margin-bottom: 5px;">Welcome Back!</h2>
+        <p style="margin-bottom: 30px; font-size: 14px; opacity: 0.8;">Login to your portal</p>
 
-                <div class="input-box">
-                    <input type="password" name="password" required>
-                    <label>Password</label>
-                </div>
+        <form action="{{ url_for('login') }}" method="POST">
+            <div class="input-group">
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
 
-                <button type="submit" class="btn">Login</button>
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
 
-                <p class="link">
-                    Don't have an account? <a class="SignUpLink">Sign Up</a>
-                </p>
-            </form>
-        </div>
+            <div
+                style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 20px; padding: 0 5px; animation: fadeIn 1s ease-out;">
+                <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                    <input type="checkbox" style="width: auto;"> Remember me
+                </label>
+                <a href="#">Forgot Password?</a>
+            </div>
 
-        <!-- REGISTER FORM -->
-        <div class="form-box register hidden" id="registerForm">
-            <h2>Create Account</h2>
-            <p class="subtitle">Join us today</p>
+            <button type="submit" class="btn">Login</button>
 
-            <form action="{{ url_for('register') }}" method="POST">
-                <div class="input-box">
-                    <input type="text" name="username" required>
-                    <label>Username</label>
-                </div>
-
-                <div class="input-box">
-                    <input type="email" name="email" required>
-                    <label>Email</label>
-                </div>
-
-                <div class="input-box">
-                    <input type="password" name="password" required>
-                    <label>Password</label>
-                </div>
-
-                <button type="submit" class="btn">Register</button>
-
-                <p class="link">
-                    Already have an account? <a class="SignInLink">Sign In</a>
-                </p>
-            </form>
-        </div>
+            <p style="margin-top: 25px; font-size: 14px; animation: fadeIn 1.2s ease-out;">
+                Don't have an account? <a href="{{ url_for('register') }}" style="font-weight: 600;">Register</a>
+            </p>
+        </form>
     </div>
-
-    <script>
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
-
-        document.querySelector('.SignUpLink').onclick = () => {
-            loginForm.classList.add('hidden');
-            registerForm.classList.remove('hidden');
-        };
-
-        document.querySelector('.SignInLink').onclick = () => {
-            registerForm.classList.add('hidden');
-            loginForm.classList.remove('hidden');
-        };
-    </script>
 
 </body>
 

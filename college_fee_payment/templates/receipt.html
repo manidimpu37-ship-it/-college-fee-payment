@@ -4,221 +4,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SB Collect Receipt – PBR VITS</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-        }
-
-        .receipt {
-            width: 900px;
-            margin: 30px auto;
-            background: #fff;
-            padding: 30px;
-            border: 1px solid #ccc;
-        }
-
-        .header {
-            text-align: center;
-        }
-
-        .header img {
-            width: 90px;
-        }
-
-        .header h2 {
-            margin: 10px 0 5px;
-            color: #1a4fa3;
-        }
-
-        .header p {
-            margin: 2px 0;
-            font-size: 14px;
-        }
-
-        hr {
-            margin: 20px 0;
-        }
-
-        table {
-            width: 100%;
-            font-size: 15px;
-        }
-
-        td {
-            padding: 6px 4px;
-            vertical-align: top;
-        }
-
-        td:first-child {
-            width: 40%;
-            font-weight: bold;
-        }
-
-        .footer {
-            margin-top: 25px;
-            font-size: 13px;
-        }
-
-        .actions {
-            text-align: center;
-            margin-top: 25px;
-        }
-
-        .btn {
-            padding: 8px 18px;
-            margin: 5px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .print {
-            background: #f4d03f;
-        }
-
-        .close {
-            background: #ccc;
-        }
-
-        @media print {
-            .actions {
-                display: none;
-            }
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .receipt {
-                width: 100%;
-                margin: 10px;
-                padding: 15px;
-            }
-
-            .header img {
-                width: 70px;
-            }
-
-            .header h2 {
-                font-size: 18px;
-            }
-
-            .header p {
-                font-size: 12px;
-            }
-
-            table {
-                font-size: 13px;
-            }
-
-            td {
-                padding: 5px 2px;
-            }
-
-            td:first-child {
-                width: 45%;
-            }
-
-            .footer {
-                font-size: 11px;
-            }
-
-            .btn {
-                padding: 10px 15px;
-                font-size: 14px;
-                display: block;
-                width: 100%;
-                margin: 5px 0;
-            }
-        }
-    </style>
+    <title>Receipt – PBR VITS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Styles moved to style.css -->
 </head>
 
 <body>
+    {% include 'spinner.html' %}
 
-    <div class="receipt">
+    <div class="glass-card receipt-card">
 
         <!-- HEADER -->
-        <div class="header">
-            <img src="{{ url_for('static', filename='pbrvits.jpg') }}" alt="PBR VITS Logo">
-            <h2>PBRVITS</h2>
+        <div class="receipt-header">
+            <img src="{{ url_for('static', filename='pbrvits.jpg') }}" alt="College Logo">
+            <h2 style="color: #1976d2; margin-top: 10px;">PBR VITS</h2>
             <p>VISVODAYA CAMPUS, UDAYAGIRI ROAD, KAVALI – 524201</p>
-            <p><b>Date:</b> {{ data.date }}</p>
+            <p style="font-size: 14px; margin-top: 5px;">Date: <b>{{ data.date }}</b></p>
         </div>
 
-        <hr>
+        <div class="receipt-body">
 
-        <!-- DETAILS -->
-        <table>
-            <tr>
-                <td>SBCollect Reference Number :</td>
-                <td>{{ data.ref }}</td>
-            </tr>
-            <tr>
-                <td>Category :</td>
-                <td>{{ data.college }}</td>
-            </tr>
-            <tr>
-                <td>Payment Mode :</td>
-                <td>{{ data.mode }}</td>
-            </tr>
-            <tr>
-                <td>Transaction Amount :</td>
-                <td>₹ {{ data.student['amount'] }}</td>
-            </tr>
-            <tr>
-                <td>Transaction Charge :</td>
-                <td>₹ 0.00</td>
-            </tr>
-            <tr>
-                <td>Total Amount (In Figures) :</td>
-                <td>₹ {{ data.student['amount'] }}</td>
-            </tr>
-            <tr>
-                <td>Total Amount (In Words) :</td>
-                <td>(Amt in words not implemented)</td>
-            </tr>
-            <tr>
-                <td>Remarks :</td>
-                <td>{{ data.student['remarks'] }}</td>
-            </tr>
-            <tr>
-                <td>Notification 1 :</td>
-                <td>Payment Successful</td>
-            </tr>
-            <tr>
-                <td>Notification 2 :</td>
-                <td>Thank you</td>
-            </tr>
-        </table>
+            <div class="receipt-row highlight">
+                <span>SBCollect Reference Number :</span>
+                <span><b>{{ data.ref }}</b></span>
+            </div>
 
-        <hr>
+            <div class="receipt-row">
+                <span>Category :</span>
+                <span>{{ data.student.category }}</span>
+            </div>
 
-        <!-- FOOTER -->
-        <div class="footer">
-            <p>
-                Thank you for choosing SB Collect. If you have any query / grievances regarding the transaction, please
-                contact us.
-            </p>
-            <p>
-                Toll-free helpline number: 1800-1111-09 / 1800-1234 / 1800-2100
-            </p>
+            <div class="receipt-row">
+                <span>NAME OF THE STUDENT :</span>
+                <span>{{ data.student.student_name }}</span>
+            </div>
+
+            <div class="receipt-row">
+                <span>ROLL NO :</span>
+                <span>{{ data.student.roll_no }}</span>
+            </div>
+
+            <div class="receipt-row">
+                <span>ACADEMIC YEAR :</span>
+                <span>{{ data.student.academic_year }}</span>
+            </div>
+
+            <div class="receipt-row">
+                <span>SEMESTER :</span>
+                <span>{{ data.student.semester }}</span>
+            </div>
+
+            <div class="receipt-row">
+                <span>COURSE :</span>
+                <span>{{ data.student.course }}</span>
+            </div>
+
+            <div class="receipt-row">
+                <span>BRANCH :</span>
+                <span>{{ data.student.branch }}</span>
+            </div>
+
+            <div class="receipt-row">
+                <span>REGULATION :</span>
+                <span>{{ data.student.regulation }}</span>
+            </div>
+
+            <div class="receipt-row">
+                <span>FEE DETAILS :</span>
+                <span>{{ data.student.fee_details }}</span>
+            </div>
+
+            <div class="receipt-row">
+                <span>AMOUNT :</span>
+                <span>Ra {{ data.student.amount }}</span>
+            </div>
+
+            <div class="receipt-row">
+                <span>Transaction charge :</span>
+                <span>Ra 0.00</span>
+            </div>
+
+            <div class="receipt-row highlight"
+                style="margin-top: 20px; border-top: 1px dotted #ccc; padding-top: 10px;">
+                <span>Total Amount (In Figures) :</span>
+                <span><b>Ra {{ data.student.amount }}</b></span>
+            </div>
+
+            <div class="receipt-row">
+                <span>Total Amount (In Words) :</span>
+                <span id="amountInWords" style="text-transform: capitalize;"></span>
+            </div>
+
+            <div class="receipt-row">
+                <span>Remarks :</span>
+                <span>{{ data.student.remarks }}</span>
+            </div>
+
+            <div class="receipt-row" style="margin-top: 20px;">
+                <span>Notification 1 :</span>
+                <span></span>
+            </div>
+
+            <div class="receipt-row">
+                <span>Notification 2 :</span>
+                <span></span>
+            </div>
+
         </div>
 
-        <!-- ACTIONS -->
-        <div class="actions">
-            <button class="btn print" onclick="window.print()">Print</button>
-            <a href="{{ url_for('login') }}"><button class="btn close">Home</button></a>
+        <div class="receipt-footer" style="margin-top: 40px; font-size: 13px; text-align: left;">
+            <p>Thank you for choosing SB Collect. If you have any query / grievances regarding the transaction, please
+                contact us</p>
+            <p style="margin-top: 5px;">Toll-free helpline number i.e. 1800-1111-09 / 1800 - 1234/1800 2100</p>
+            <p style="margin-top: 5px;">Email -: sbcollect@sbi.co.in</p>
         </div>
 
-        <script>
-            // Auto print on load
-            window.onload = function () {
-                window.print();
-            };
-        </script>
+        <div class="buttons" style="justify-content: center; margin-top: 30px;">
+            <button onclick="window.print()" class="btn" style="width: auto; padding: 10px 30px;">Print</button>
+            <a href="{{ url_for('login') }}" class="btn"
+                style="background: transparent; border: 1px solid #fff; width: auto; padding: 10px 30px; display: inline-block; text-align: center;">Close</a>
+        </div>
+
+    </div>
+
+    <script>
+        function numToWords(n) {
+            const a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
+            const b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+            const num = ('000000000' + n).slice(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+            if (!num) return;
+
+            let str = '';
+            str += (num[1] != 0) ? (a[Number(num[1])] || b[num[1][0]] + ' ' + a[num[1][1]]) + 'crore ' : '';
+            str += (num[2] != 0) ? (a[Number(num[2])] || b[num[2][0]] + ' ' + a[num[2][1]]) + 'lakh ' : '';
+            str += (num[3] != 0) ? (a[Number(num[3])] || b[num[3][0]] + ' ' + a[num[3][1]]) + 'thousand ' : '';
+            str += (num[4] != 0) ? (a[Number(num[4])] || b[num[4][0]] + ' ' + a[num[4][1]]) + 'hundred ' : '';
+            str += (num[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(num[5])] || b[num[5][0]] + ' ' + a[num[5][1]]) + 'only ' : 'only';
+
+            return str;
+        }
+
+        const amount = "{{ data.student.amount }}";
+        if (amount) {
+            document.getElementById("amountInWords").innerText = "Rupees " + numToWords(amount);
+        }
+    </script>
 
 </body>
 
